@@ -7,17 +7,53 @@ var skycons = new Skycons();
   skycons.play();
   
   // want to change the icon? no problem:
-  skycons.set("today", Skycons.PARTLY_CLOUDY_NIGHT);
   
 /*
 Get value from Bootstrap dropdown menu
 */
+var citylist =[ '臺北市',
+                '新北市',
+                '台中市',
+                '臺南市',
+                '高雄市',
+                '基隆市',
+                '桃園區',
+                '新竹市',
+                '新竹縣',
+                '苗栗縣',
+                '彰化縣',
+                '南投縣',
+                '雲林縣',
+                '嘉義市',
+                '嘉義縣',
+                '屏東縣',
+                '宜蘭縣',
+                '花蓮縣',
+                '台東縣',
+                '澎湖縣',
+                '金門縣',
+                '連江縣' ];
+
+var city="Taipei";
+
+var citychoose = function(){
+  $('.btn').text(citylist[0]);
+  $('li').remove();
+  for(var i=0;i<citylist.length;i+=1){
+  $('<li role="presentation"><a role="menuitem" tabindex="-1" href="#">'+citylist[i]+'</a></li>').appendTo('#dropdown');
+   }
+ };
+
+citychoose();
+
 $('#dropdown li').on('click', function(){
-    alert($(this).text());
+  city = ($(this).text());
+  $('.btn').text($(this).text());  
+  getweather();
 });
 
-  var city="Taipei";
-       $.ajax('https://query.yahooapis.com/v1/public/yql', {
+var getweather = function(){
+$.ajax('https://query.yahooapis.com/v1/public/yql', {
          method: 'GET',
          data: {
            q: 'select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="'+city+'") and u="c"',
@@ -60,6 +96,7 @@ $('#dropdown li').on('click', function(){
           $('#day2Tem').text(Day2.low+"-"+Day2.high+ "℃");
           $('#day3Tem').text(Day3.low+"-"+Day3.high+ "℃");
 
+      var changeSkycon = function(){
           for(var i =0;i<weather.length;i+=1){
             var conditioncode = weather[i].code;
             var date =["today","day1","day2","day3"];
@@ -73,13 +110,23 @@ $('#dropdown li').on('click', function(){
               skycons.set(date[i], Skycons.PARTLY_CLOUDY_NIGHT);
             }else if(conditioncode===(25||26||44)){
               skycons.set(date[i], Skycons.CLOUDY);
-            }else if((3<=conditioncode<=10)||(conditioncode===35)){
+            }else if((3<=conditioncode && conditioncode<=10)||(conditioncode===35)){
               skycons.set(date[i], Skycons.RAIN);
-            }else if((37<=conditioncode<=40)||(conditioncode===(11||12||45||47))){
-              skycons.set(date[i], Skycons.RAIN);
+            }else if((37<=conditioncode && conditioncode<=40)||(conditioncode===(11||12||45||47))){
+              skycons.set(date[i], Skycons.SLEET);
+            }else if((13<=conditioncode && conditioncode<=18)||(conditioncode===(41||42||43||46))){
+              skycons.set(date[i], Skycons.SNOW);
+            }else if(conditioncode===24){
+              skycons.set(date[i], Skycons.WIND);
+            }else if(19<=conditioncode && conditioncode<=23){
+              skycons.set(date[i], Skycons.FOG);
             }
          };
-       }});
+       };
+       changeSkycon();
+     }
+   });
 
-
+};
+getweather();
   

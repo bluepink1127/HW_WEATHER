@@ -114,19 +114,32 @@ $.ajax('https://query.yahooapis.com/v1/public/yql', {
               skycons.set(date[i], Skycons.RAIN);
             }else if((37<=conditioncode && conditioncode<=40)||(conditioncode===(11||12||45||47))){
               skycons.set(date[i], Skycons.SLEET);
+<<<<<<< HEAD
             }else if((13<=conditioncode && conditioncode<=18)||(conditioncode===(41||42||43||46))){
               skycons.set(date[i], Skycons.SNOW);
             }else if(conditioncode===24){
               skycons.set(date[i], Skycons.WIND);
             }else if(19<=conditioncode && conditioncode<=23){
               skycons.set(date[i], Skycons.FOG);
+=======
+>>>>>>> origin/gh-pages
             }
          };
        };
        changeSkycon();
      }
    });
+<<<<<<< HEAD
 
 };
 getweather();
   
+=======
+
+};
+getweather();
+  
+
+
+  
+>>>>>>> origin/gh-pages
